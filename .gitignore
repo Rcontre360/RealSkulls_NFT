@@ -1,2 +1,13 @@
 #modules
 node_modules
+
+# truffle
+build
+client/src/contracts
+
+# typechain
+types
+
+# buidler
+artifacts
+cache

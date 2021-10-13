@@ -25,7 +25,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/SimpleStorage.sol\":\"SimpleStorage\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/SimpleStorage.sol\":{\"keccak256\":\"0x9e7ba38a5bcefad7e61282b5e39889c163997fbf7bdb6a9702c981947a2de927\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1c58161b6132d3c4656662515499aeb9bfce1b0e23d50706174c57b94fc320ab\",\"dweb:/ipfs/Qmb78tEQSnanFBKzVRnWVN523pfAYx5JMRANSpj94vGvev\"]}},\"version\":1}",
@@ -1261,9 +1262,23 @@
     "name": "solc",
     "version": "0.8.9+commit.e5eed63a.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "1633954446955": {
+      "events": {},
+      "links": {},
+      "address": "0x62EDBdfA78DB9c8242E4B9a624a6c6d349fcad36",
+      "transactionHash": "0x4f19dbcf9eb750f24a560e779cd6c6e8a99e5f308fec7a67c23024de0318b2c0"
+    },
+    "1634003700037": {
+      "events": {},
+      "links": {},
+      "address": "0x6e7519c1Dc0aD4686B858C95Bd44C8D6C84DE0C2",
+      "transactionHash": "0x0448ac4ddfea08b11c3848bd9b9b83fdc0e1739c97c97fc76426e377ad04f123"
+    }
+  },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-10-10T18:50:29.395Z",
+  "updatedAt": "2021-10-12T01:56:37.624Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
