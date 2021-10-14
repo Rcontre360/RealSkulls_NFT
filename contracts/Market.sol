@@ -8,93 +8,52 @@ import "./lib/IRealSkulls.sol";
 
 contract Market is Ownable {
   address public realSkullsAddress;
+  address public skullTokenAddress;
+  uint256 public tokenForRealSkulls;
   mapping(uint256 => address) public soldSkulls;
-  mapping(uint256 => mapping(address => uint256)) private _prices;
+  mapping(address => uint256) private _prices;
 
-  constructor(address _realSkullsAddress) {
+  constructor(
+    address _realSkullsAddress,
+    address _skullTokenAddress,
+    uint256 _tokenForRealSkulls
+  ) {
     realSkullsAddress = _realSkullsAddress;
+    skullTokenAddress = _skullTokenAddress;
+    tokenForRealSkulls = _tokenForRealSkulls;
   }
 
-  function setPrice(
-    uint256 tokenId,
-    address paymentToken,
-    uint256 price
-  ) public onlyOwner {
-    _prices[tokenId][paymentToken] = price;
+  function setPrice(address paymentToken, uint256 price) public onlyOwner {
+    _prices[paymentToken] = price;
   }
 
-  function getPrice(uint256 tokenId, address paymentToken)
-    public
-    view
-    returns (uint256)
-  {
-    return _prices[tokenId][paymentToken];
+  function getPrice(address paymentToken) public view returns (uint256) {
+    return _prices[paymentToken];
   }
 
-  function buyTokens(
-    uint256[] memory tokens,
-    uint256[] memory tokensAmount,
-    address payTokenAddress
-  ) public payable {
-    _payTokens(tokens, tokensAmount, payTokenAddress);
-    _transfer(_msgSender(), tokens, tokensAmount);
-  }
-
-  function mintAndBuyToken(
-    uint256[] memory tokens,
-    uint256[] memory tokensAmount,
-    address payTokenAddress
-  ) public payable {
+  function mint(address payTokenAddress, uint256 amount) public payable {
     IRealSkulls realSkullContract = IRealSkulls(realSkullsAddress);
-    _payTokens(tokens, tokensAmount, payTokenAddress);
-    realSkullContract.mint(_msgSender(), tokens, tokensAmount);
+    IERC20 skullTokenContract = IERC20(skullTokenAddress);
+
+    _payTokens(payTokenAddress, amount);
+    realSkullContract.mint(_msgSender(), amount);
+    skullTokenContract.transfer(_msgSender(), tokenForRealSkulls);
   }
 
-  function _payTokens(
-    uint256[] memory tokens,
-    uint256[] memory tokensAmount,
-    address payTokenAddress
-  ) public payable {
-    require(tokens.length == tokensAmount.length, "INVALID_INPUT");
+  function _payTokens(address payTokenAddress, uint256 amount) public payable {
+    require(amount > 0, "INVALID_INPUT");
+    require(getPrice(payTokenAddress) > 0, "INVALID_INPUT");
 
     IERC20 tokenContract = IERC20(payTokenAddress);
-    uint256 payAmount = 0;
-
-    for (uint256 i = 0; i < tokens.length; i++) {
-      uint256 price = getPrice(tokens[i], payTokenAddress) * tokensAmount[i];
-      require(soldTo(tokens[i]) == address(0) && price > 0, "TOKEN_SOLD");
-      payAmount += getPrice(tokens[i], payTokenAddress) * tokensAmount[i];
-      soldSkulls[tokens[i]] = _msgSender();
-    }
+    uint256 payAmount = getPrice(payTokenAddress) * amount;
 
     if (address(0) != payTokenAddress) {
       require(tokenContract.balanceOf(_msgSender()) >= payAmount, "NO_MONEY");
-      tokenContract.transferFrom(_msgSender(), owner(), payAmount);
+      tokenContract.transferFrom(_msgSender(), address(this), payAmount);
     } else {
       //use native token
       require(payAmount >= msg.value, "NO_MONEY");
-      payable(owner()).transfer(msg.value);
     }
-  }
-
-  function _transfer(
-    address recipient,
-    uint256[] memory tokens,
-    uint256[] memory tokensAmount
-  ) internal {
-    require(
-      recipient != address(0) && tokens.length == tokensAmount.length,
-      "INVALID_INPUT"
-    );
-    IRealSkulls realSkullContract = IRealSkulls(realSkullsAddress);
-
-    realSkullContract.safeBatchTransferFrom(
-      address(this),
-      recipient,
-      tokens,
-      tokensAmount,
-      ""
-    );
   }
 
   function soldTo(uint256 tokenId) public view returns (address) {

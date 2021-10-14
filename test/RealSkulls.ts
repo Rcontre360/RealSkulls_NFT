@@ -1,6 +1,6 @@
 
 
-contract("SimpleStorage", accounts => {
+contract("RealSkulls", accounts => {
 
   const mainOwner = accounts[0]
   const RealSkulls = artifacts.require("RealSkulls");

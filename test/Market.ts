@@ -37,8 +37,7 @@ contract("Market", accounts => {
     shouldThrowAsync(market.getPrice(1, accounts[1]))
   })
 
-  it("Should allow token buy", async () => {
-    realSkulls.mint(mainOwner, [1, 2, 3, 4], [1, 1, 1, 1]);
+  it("Should mint and buy tokens", async () => {
   })
 })
 
