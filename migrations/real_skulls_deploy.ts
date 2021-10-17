@@ -7,14 +7,16 @@ const migrateFunction3 = (artifacts: Truffle.Artifacts, web3: Web3) => {
   const RealSkulls = artifacts.require("RealSkulls");
   const Market = artifacts.require("Market");
   const SkullToken = artifacts.require("SkullToken");
+  const MockToken = artifacts.require("MockToken");
   return async (
     deployer: Truffle.Deployer,
     network: Network,
     accounts: string[]
   ) => {
-    await deployer.deploy(RealSkulls);
+    await deployer.deploy(MockToken);
     await deployer.deploy(SkullToken);
-    await deployer.deploy(Market, RealSkulls.address);
+    await deployer.deploy(Market, SkullToken.address, 10);
+    await deployer.deploy(RealSkulls, Market.address);
   };
 };
 

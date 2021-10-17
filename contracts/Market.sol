@@ -5,20 +5,17 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./lib/IRealSkulls.sol";
+import "./RealSkulls.sol";
 
 contract Market is Ownable {
-  address public realSkullsAddress;
+  RealSkulls public realSkullsContract;
   address public skullTokenAddress;
   uint256 public tokenForRealSkulls;
-  mapping(uint256 => address) public soldSkulls;
+  mapping(uint256 => address) private _soldSkulls;
   mapping(address => uint256) private _prices;
 
-  constructor(
-    address _realSkullsAddress,
-    address _skullTokenAddress,
-    uint256 _tokenForRealSkulls
-  ) {
-    realSkullsAddress = _realSkullsAddress;
+  constructor(address _skullTokenAddress, uint256 _tokenForRealSkulls) {
+    realSkullsContract = new RealSkulls(address(this));
     skullTokenAddress = _skullTokenAddress;
     tokenForRealSkulls = _tokenForRealSkulls;
   }
@@ -31,12 +28,15 @@ contract Market is Ownable {
     return _prices[paymentToken];
   }
 
+  function soldTo(uint256 tokenId) public view returns (address) {
+    return _soldSkulls[tokenId];
+  }
+
   function mint(address payTokenAddress, uint256 amount) public payable {
-    IRealSkulls realSkullContract = IRealSkulls(realSkullsAddress);
     IERC20 skullTokenContract = IERC20(skullTokenAddress);
 
     _payTokens(payTokenAddress, amount);
-    realSkullContract.mint(_msgSender(), amount);
+    realSkullsContract.mint(_msgSender(), amount);
     skullTokenContract.transfer(_msgSender(), tokenForRealSkulls);
   }
 
@@ -54,9 +54,5 @@ contract Market is Ownable {
       //use native token
       require(payAmount >= msg.value, "NO_MONEY");
     }
-  }
-
-  function soldTo(uint256 tokenId) public view returns (address) {
-    return soldSkulls[tokenId];
   }
 }

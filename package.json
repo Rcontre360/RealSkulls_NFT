@@ -4,7 +4,8 @@
     "postinstall": "truffle compile && npm run generate-types",
     "build": "truffle compile && npm run generate-types",
     "deploy": "truffle deploy --network develop",
-    "test": "truffle test ./test/*.ts "
+    "test": "truffle test ./test/Market.ts && truffle test ./test/RealSkulls.ts ",
+    "start": "truffle console --network develop"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.2",

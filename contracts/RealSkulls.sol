@@ -8,7 +8,9 @@ contract RealSkulls is ERC1155, Ownable {
   uint256 public currentId;
   mapping(uint256 => uint256) private _tokenSupply;
 
-  constructor() ERC1155("https://game.example/api/item/{id}.json") {}
+  constructor(address marketAddress)
+    ERC1155("https://game.example/api/item/{id}.json")
+  {}
 
   function mint(address to, uint256 amount) public onlyOwner {
     for (uint256 i = 0; i < amount; i++) {

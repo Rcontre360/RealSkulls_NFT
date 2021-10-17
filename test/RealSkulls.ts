@@ -1,3 +1,4 @@
+import {RealSkullsInstance} from '../types/truffle-contracts'
 
 
 contract("RealSkulls", accounts => {
@@ -6,27 +7,33 @@ contract("RealSkulls", accounts => {
   const RealSkulls = artifacts.require("RealSkulls");
   const Market = artifacts.require("Market");
   const SkullToken = artifacts.require("SkullToken");
+  let rs: RealSkullsInstance;
+
+  beforeEach(async () => {
+    rs = await RealSkulls.deployed()
+  })
 
   it("Should initialize properly", async () => {
 
   })
 
   it("Should mint various nfts at once", async () => {
-    let rs = await RealSkulls.deployed();
-    const idsToMint = [123213213, 34234234, 3424232342]
-    const amounts = [1000, 1, 1]
-    const balances = [] as Promise<BN>[]
+    const receiver = accounts[2];
+    const amount = 10;
 
-    await rs.mint(mainOwner, idsToMint, amounts);
-    idsToMint.forEach(async (id) => {
-      balances.push(rs.balanceOf(mainOwner, id));
-    });
+    await rs.mint(receiver, amount);
+    const currentId = await rs.currentId();
+    assert.equal(currentId.toString(), String(amount));
+  })
 
-    const res = await Promise.all(balances)
-    res.forEach((balance, i) => {
-      console.log(balance.toString(), amounts[i])
-      assert.equal(balance.toString(), String(amounts[i]));
-    })
+  it("Should record correct balances", async () => {
+    const amount = 10;
+    const supply: Promise<BN>[] = []
+    for (let i = 0; i < amount; i++)
+      supply.push(rs.getSupply(i));
+
+    const res = await Promise.all(supply)
+    assert.deepEqual(res.map(r => r.toString()), (new Array(10).fill('1')))
   })
 
 })
