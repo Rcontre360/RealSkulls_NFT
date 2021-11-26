@@ -9,19 +9,20 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.2",
-    "@truffle/hdwallet-provider": "^1.5.1"
+    "@truffle/hdwallet-provider": "^1.5.1",
+    "moralis": "^0.0.95"
   },
   "devDependencies": {
+    "@typechain/truffle-v5": "^5.1.0",
+    "@types/bn.js": "^4.11.6",
     "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.10.3",
-    "@typechain/truffle-v5": "^5.1.0",
+    "@types/web3": "^1.2.2",
+    "truffle": "^5.1.22",
     "truffle-typings": "^1.0.8",
     "ts-node": "^10.2.1",
     "typechain": "^5.1.2",
-    "@types/bn.js": "^4.11.6",
-    "@types/web3": "^1.2.2",
-    "truffle": "^5.1.22",
     "typescript": "^4.4.3"
   }
 }
